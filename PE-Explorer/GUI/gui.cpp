@@ -62,13 +62,13 @@ PWSTR gui::open_file()
     PWSTR filePath = nullptr;
 
     const HRESULT initResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-    if (!SUCCEEDED(initResult))
+    if (FAILED(initResult))
     {
         return nullptr;
     }
 
     const HRESULT instanceResult = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&fileOpen));
-    if (!SUCCEEDED(instanceResult))
+    if (FAILED(instanceResult))
     {
         CoUninitialize();
         return nullptr;
@@ -77,7 +77,7 @@ PWSTR gui::open_file()
     const HRESULT showDialog = fileOpen->Show(NULL);
     const HRESULT getItemFromDialog = fileOpen->GetResult(&item);
 
-    if (!SUCCEEDED(showDialog) || !SUCCEEDED(getItemFromDialog))
+    if (FAILED(showDialog) || FAILED(getItemFromDialog))
     {
         fileOpen->Release();
         CoUninitialize();
